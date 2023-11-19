@@ -6,15 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Checkers
+namespace Checkers.Classes
 {
     public class Board
     {
-        public Panel[,] CheckersBoard { get; set; }
+        private Panel[,] CheckersBoard { get; set; }
 
-        public Panel ClickedPanel { get; set; }
-
-        public string label { get; set; }
+        private Panel ClickedPanel { get; set; }
 
         private Panel _temp { get; set; }
 
@@ -64,7 +62,8 @@ namespace Checkers
                     }
 
                     form.Controls.Add(newPanel);
-                    CheckersBoard[n, m] = newPanel;
+                    Checker checker = new Checker(newPanel);
+                    CheckersBoard[n, m] = checker.Panel;
 
                     if (n % 2 == 0)
                     {
@@ -84,8 +83,6 @@ namespace Checkers
         {
 
             ClickedPanel = sender as Panel;
-            int pozX = ClickedPanel.Location.X / 100;
-            int pozY = ClickedPanel.Location.Y / 100;
             Color availableMove = Color.LightYellow;
             bool isKill;
 
@@ -99,7 +96,6 @@ namespace Checkers
                     if (!isKill)
                     {
                         _isWhiteTurn = !_isWhiteTurn;
-                        label = _isWhiteTurn ? "White" : "Black";
                         CheckForWin();
                     }
                 }
@@ -107,7 +103,7 @@ namespace Checkers
                 {
                     _isWhiteTurn = !_isWhiteTurn;
                     BackToNormalColors();
-                    
+
                 }
 
             }
@@ -115,7 +111,7 @@ namespace Checkers
             {
                 BackToNormalColors();
             }
-            else if ((ClickedPanel.Name == "white" && !_isWhiteTurn) || (ClickedPanel.Name == "black" && _isWhiteTurn))
+            else if (ClickedPanel.Name == "white" && !_isWhiteTurn || ClickedPanel.Name == "black" && _isWhiteTurn)
             {
                 BackToNormalColors();
             }
@@ -343,7 +339,7 @@ namespace Checkers
             CheckersBoard[locX, locY].BackgroundImage = null;
             CheckersBoard[locX, locY].Name = "";
 
-            
+
 
             return isKill;
         }
@@ -412,7 +408,7 @@ namespace Checkers
                 ResetBoard(_form);
             }
 
-            
+
 
         }
 
